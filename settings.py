@@ -132,6 +132,12 @@ SESSION_CONFIGS = [
         'display_name': "Event template",
         'num_demo_participants': 1,
         'app_sequence': ['event_template']
+    },
+    {
+        'name': 'mixed_strategies',
+        'display_name': 'Mixed Strategies',
+        'num_demo_participants': 6,
+        'app_sequence': ['mixed_strategies', 'payment_info']
     }
 ]
 
