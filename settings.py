@@ -131,7 +131,7 @@ SESSION_CONFIGS = [
         'name': 'event_template',
         'display_name': "Event template",
         'num_demo_participants': 1,
-        'app_sequence': []
+        'app_sequence': ['event_template']
     }
 ]
 
