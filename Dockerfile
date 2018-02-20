@@ -19,7 +19,7 @@ RUN mkdir -p ${APP_LOCATION} && ln -s ${APP_LOCATION}/${LAUNCHER} /usr/local/bin
     apt-get update && \
     apt-get install -y --no-install-recommends build-essential make wget libssl-dev zlib1g-dev ca-certificates && \
     wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tar.xz && \
-    tar -xvf Python-${PYTHON_VER}.tar.xz && cd Python-${PYTHON-VER} && \
+    tar -xvf Python-${PYTHON_VER}.tar.xz && cd Python-${PYTHON_VER} && \
     ./configure --with-lto --enable-optimizations && make -j$(nproc) && make install && \
     cd - && rm -rf Python* && \
     wget https://pypi.python.org/packages/18/85/eb7af503356e933061bf1220033c3a85bad0dbc5035dfd9a97f1e900dfcb/Twisted-${TWISTED_VER}.tar.bz2#md5=8b35a88d5f1a4bfd762a008968fddabf && \
