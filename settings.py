@@ -128,20 +128,19 @@ SESSION_CONFIG_DEFAULTS = {
 
 SESSION_CONFIGS = [
     {
-        'name': 'event_template',
-        'display_name': "Event template",
-        'num_demo_participants': 1,
-        'app_sequence': ['event_template']
-    },
-    {
-        'name': 'mixed_strategies',
-        'display_name': 'Mixed Strategies',
+        'name': 'tennis_tournament',
+        'display_name': 'Tennis Tournament',
         'num_demo_participants': 6,
-        'app_sequence': ['mixed_strategies', 'payment_info']
+        'app_sequence': ['tennis_tournament', 'payment_info']
     }
 ]
 
-
+# {
+#     'name': 'event_template',
+#     'display_name': "Event template",
+#     'num_demo_participants': 1,
+#     'app_sequence': ['event_template']
+# },
 # {
 #     'name': 'public_goods',
 #     'display_name': "Public Goods",
