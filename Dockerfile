@@ -14,7 +14,10 @@ COPY . ${APP_LOCATION}
 
 RUN mkdir -p ${APP_LOCATION} && ln -s ${APP_LOCATION}/${LAUNCHER} /usr/local/bin/${LAUNCHER} && \
     ln -s ${APP_LOCATION}/${INIT_SCRIPT} /usr/local/bin/${INIT_SCRIPT} && \
-    apt-get update && apt-get install -y --no-install-recommends build-essential make wget libssl-dev zlib1g-dev && \
+    chmod +x ${APP_LOCATION}/${LAUNCHER} && \
+    chmod +x ${APP_LOCATION}/${INIT_SCRIPT} && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends build-essential make wget libssl-dev zlib1g-dev ca-certificates && \
     wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tar.xz && \
     tar -xvf Python-${PYTHON_VER}.tar.xz && cd Python-${PYTHON-VER} && \
     ./configure --with-lto --enable-optimizations && make -j$(nproc) && make install && \
@@ -26,5 +29,5 @@ RUN mkdir -p ${APP_LOCATION} && ln -s ${APP_LOCATION}/${LAUNCHER} /usr/local/bin
     pip3 install --no-cache-dir -U pip && \
     pip3 install --no-cache-dir -r requirements_base.txt && \
     cd - && \
-    apt-get remove --purge -y build-essential make wget libssl-dev zlib1g-dev $(apt-mark showauto) && \
+    apt-get remove --purge -y build-essential make wget libssl-dev zlib1g-dev ca-certificates $(apt-mark showauto) && \
     rm -rf /var/lib/apt/apt/lists/*
