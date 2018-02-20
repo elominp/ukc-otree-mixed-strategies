@@ -17,10 +17,10 @@ RUN mkdir -p ${APP_LOCATION} && ln -s ${APP_LOCATION}/${LAUNCHER} /usr/local/bin
     chmod +x ${APP_LOCATION}/${LAUNCHER} && \
     chmod +x ${APP_LOCATION}/${INIT_SCRIPT} && \
     apt-get update && \
-    apt-get install -y --no-install-recommends build-essential make wget libssl-dev zlib1g-dev ca-certificates && \
+    apt-get install -y --no-install-recommends build-essential make wget libssl-dev zlib1g-dev libsqlite3-dev ca-certificates && \
     wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tar.xz && \
     tar -xvf Python-${PYTHON_VER}.tar.xz && cd Python-${PYTHON_VER} && \
-    ./configure --with-lto --enable-optimizations && make -j$(nproc) && make install && \
+    ./configure --with-lto --enable-optimizations --enable-loadable-sqlite-extensions && make -j$(nproc) && make install && \
     cd - && rm -rf Python* && \
     wget https://pypi.python.org/packages/18/85/eb7af503356e933061bf1220033c3a85bad0dbc5035dfd9a97f1e900dfcb/Twisted-${TWISTED_VER}.tar.bz2#md5=8b35a88d5f1a4bfd762a008968fddabf && \
     tar -xvf Twisted-${TWISTED_VER}.tar.bz2 && cd Twisted-${TWISTED_VER} && python3 setup3.py install && \
@@ -29,5 +29,5 @@ RUN mkdir -p ${APP_LOCATION} && ln -s ${APP_LOCATION}/${LAUNCHER} /usr/local/bin
     pip3 install --no-cache-dir -U pip && \
     pip3 install --no-cache-dir -r requirements_base.txt && \
     cd - && \
-    apt-get remove --purge -y build-essential make wget libssl-dev zlib1g-dev ca-certificates $(apt-mark showauto) && \
+    apt-get remove --purge -y build-essential make wget libssl-dev zlib1g-dev libsqlite3-dev ca-certificates $(apt-mark showauto) && \
     rm -rf /var/lib/apt/apt/lists/*
