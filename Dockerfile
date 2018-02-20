@@ -27,6 +27,7 @@ RUN mkdir -p ${APP_LOCATION} && ln -s ${APP_LOCATION}/${LAUNCHER} /usr/local/bin
     cd - && rm -rf Twisted* && \
     cd ${APP_LOCATION} && \
     pip3 install --no-cache-dir -U pip && \
+    pip3 install --no-cache-dir -U otree && \
     pip3 install --no-cache-dir -r requirements_base.txt && \
     cd - && \
     apt-get remove --purge -y build-essential make wget libssl-dev zlib1g-dev libsqlite3-dev ca-certificates $(apt-mark showauto) && \
