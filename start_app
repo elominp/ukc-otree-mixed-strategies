@@ -1,0 +1,4 @@
+#!/bin/sh
+
+otree resetdb
+otree runserver

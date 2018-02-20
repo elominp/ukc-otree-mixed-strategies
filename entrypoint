@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export OTREE_PRODUCTION=1
+
+cd /opt/otree
+
+exec "${@}"
