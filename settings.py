@@ -132,6 +132,12 @@ SESSION_CONFIGS = [
         'display_name': 'Tennis Tournament',
         'num_demo_participants': 6,
         'app_sequence': ['tennis_tournament', 'payment_info']
+    },
+    {
+        'name': 'principal_agent_relations_1',
+        'display_name': 'Principal agent relations: Game 1',
+        'num_demo_participants': 6,
+        'app_sequence': ['principal_agent_relations_1', 'payment_info']
     }
 ]
 
