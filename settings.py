@@ -144,6 +144,12 @@ SESSION_CONFIGS = [
         'display_name': 'Principal agent relations: Game 2',
         'num_demo_participants': 6,
         'app_sequence': ['principal_agent_relations_2', 'payment_info']
+    },
+    {
+        'name': 'principal_agent_relations_3',
+        'display_name': 'Principal agent relations: Game 3',
+        'num_demo_participants': 6,
+        'app_sequence': ['principal_agent_relations_3', 'payment_info']
     }
 ]
 
