@@ -1,0 +1,40 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Round {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+    <h4>Instructions</h4>
+    <p>
+        Blablabla to copy. You're the employer.
+
+    </p>
+
+    <h4>Round history</h4>
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Player and outcome</th>
+        </tr>
+        {% for p in player_in_previous_rounds %}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>
+                    You proposed a wage of {{ p.wage }} for a desired effort level of {{ p.effort_level }} and earned {{ p.payoff }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% formfield group.wage label="Proposed wage:" %}
+
+    {% formfield group.desired_effort_level label="Desired effort level:" %}
+
+    {% formfield group.fine label="Fine:" %}
+
+    {% next_button %}
+
+{% endblock %}
