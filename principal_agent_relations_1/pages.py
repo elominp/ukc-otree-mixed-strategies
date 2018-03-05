@@ -73,7 +73,9 @@ class ResultsSummary(Page):
             'total_payoff': sum([r.payoff for r in self.player.in_all_rounds()]),
             'player_in_all_rounds': self.player.in_all_rounds(),
             'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
-            'avg_payoff': self.avg_payoff()
+            'avg_payoff': self.avg_payoff(),
+            'effort': [p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()],
+            'rounds': list(range(1, len(self.player.in_all_rounds()) + 1))
         }
 
 

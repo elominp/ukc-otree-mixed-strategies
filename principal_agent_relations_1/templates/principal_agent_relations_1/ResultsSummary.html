@@ -7,7 +7,7 @@
 
 {% block content %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <table class="table">
         <tr>
             <th>Round</th>
@@ -27,28 +27,84 @@
         Your total payoff is therefore {{ total_payoff }}.
     </p>
 
-    <canvas id='final_chart' width="400" height="400"></canvas>
+    <p>Average efforts and payoffs by wage:</p>
+    <canvas id="final_chart" width="400" height="400"></canvas>
+
+    <p>Effort over time:</p>
+    <canvas id="effort_chart" width="400" height="400"></canvas>
 
     <script>
         var canvas = document.getElementById("final_chart").getContext("2d");
         var chart = new Chart(canvas, {
-            type: 'bar',
+            type: "bar",
             data: {
                 labels: [{% for i in avg_effort %}{{i}},{% endfor %}],
                 datasets: [
                     {% comment %} {% for p in player %} {% endcomment %}
                         {
-                            label: 'Average Effort',
+                            label: "Average Effort",
                             data: [ {% for _, x in avg_effort.items %}{{x}},{% endfor %} ],
-                            backgroundColor: 'rgba(0, 255, 0, 0.5)'
+                            backgroundColor: "rgba(0, 255, 0, 0.5)"
                         },
                         {
-                            label: 'Average Payoff',
+                            label: "Average Payoff",
                             data: [ {% for _, x in avg_payoff.items %}{{x}},{% endfor %} ],
-                            backgroundColor: 'rgba(0, 0, 255, 0.5)'
+                            backgroundColor: "rgba(0, 0, 255, 0.5)"
                         }
                     {% comment %} {% endfor %} {% endcomment %}
                 ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Wage"
+                        }
+                    }],
+                        yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Avg. Effort level / Avg. Payoff"
+                        }
+                    }]
+                }
+            }
+        })
+        
+        var effort_canvas = document.getElementById("effort_chart").getContext("2d");
+        var effort_chart = new Chart(effort_canvas, {
+            type: "line",
+            data: {
+                labels: [ {% for round in rounds %}{{round}},{% endfor %} ],
+                datasets: [
+                    {
+                        label: "Avg. effort level",
+                        data: [ {% for x in effort %}{{x}},{% endfor %} ],
+                        backgroundColor: "rgba(0, 0, 0, 0.0)",
+                        borderColor: "rgba(255, 0, 0, 0.5)"
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Time"
+                        }
+                    }],
+                        yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Effort level"
+                        }
+                    }]
+                }
             }
         })
     </script>
