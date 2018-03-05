@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from statistics import mean
 from ._builtin import *
 from .models import Constants
 
@@ -47,10 +48,32 @@ class ResultsSummary(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
 
+    def avg_effort(self, player):
+        effort = {}
+        for i in range(1, 11):
+            effort[i] = []
+        for p in player.in_all_rounds():
+            effort[p.wage].append(p.effort_level)
+        for key, l in effort.items():
+            effort[key] = mean(l) if len(l) > 0 else 0
+        return effort
+
+    def avg_payoff(self):
+        payoff = {}
+        for i in range(1, 11):
+            payoff[i] = []
+        for p in self.player.in_all_rounds():
+            payoff[p.wage].append(p.payoff)
+        for key, l in payoff.items():
+            payoff[key] = float(mean(l)) if len(l) > 0 else 0
+        return payoff
+
     def vars_for_template(self):
         return {
             'total_payoff': sum([r.payoff for r in self.player.in_all_rounds()]),
-            'player_in_all_rounds': self.player.in_all_rounds()
+            'player_in_all_rounds': self.player.in_all_rounds(),
+            'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
+            'avg_payoff': self.avg_payoff()
         }
 
 
