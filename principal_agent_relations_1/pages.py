@@ -121,6 +121,14 @@ class ResultsSummary(Page):
                       enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
         return list(filter(None.__ne__, effort))
 
+    def get_rounds(self):
+        if self.round_number == Constants.num_rounds_part_1:
+            return list(range(1, Constants.num_rounds_part_1 + 1))
+        elif self.round_number == Constants.num_rounds_part_2:
+            return list(range(1, (Constants.num_rounds_part_2 - Constants.num_rounds_part_1) + 1))
+        else:
+            return list(range(1, (Constants.num_rounds - Constants.num_rounds_part_2) + 1))
+
     def vars_for_template(self):
         return {
             'total_payoff': sum([r.payoff for r in self.player.in_all_rounds()]),
@@ -128,7 +136,7 @@ class ResultsSummary(Page):
             'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
             'avg_payoff': self.avg_payoff(),
             'effort': self.get_effort(),
-            'rounds': list(range(1, len(self.player.in_all_rounds()) + 1))
+            'rounds': self.get_rounds()
         }
 
 
