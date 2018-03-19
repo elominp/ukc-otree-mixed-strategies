@@ -85,13 +85,12 @@ class ResultsSummary(Page):
         effort = {}
         for i in range(1, 11):
             effort[i] = []
-        # for i, p in enumerate(player.in_all_rounds(), 1):
-        #     if (self.round_number == Constants.num_rounds_part_1 and i <= Constants.num_rounds_part_1) or \
-        #         (self.round_number == Constants.num_rounds_part_2 and
-        #          Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2) or \
-        #         (self.round_number == Constants.num_rounds and i > Constants.num_rounds_part_2):
-        for p in player.in_all_rounds():
-            effort[p.wage].append(p.effort_level)
+        for i, p in enumerate(player.in_all_rounds(), 1):
+            if (self.round_number == Constants.num_rounds_part_1 and i <= Constants.num_rounds_part_1) or \
+                    (self.round_number == Constants.num_rounds_part_2 and
+                     Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2) or \
+                    (self.round_number == Constants.num_rounds and i > Constants.num_rounds_part_2):
+                effort[p.wage].append(p.effort_level)
         for key, l in effort.items():
             effort[key] = mean(l) if len(l) > 0 else 0
         return effort
@@ -100,16 +99,27 @@ class ResultsSummary(Page):
         payoff = {}
         for i in range(1, 11):
             payoff[i] = []
-        # for i, p in enumerate(self.player.in_all_rounds(), 1):
-        #     if (self.round_number == Constants.num_rounds_part_1 and i <= Constants.num_rounds_part_1) or \
-        #         (self.round_number == Constants.num_rounds_part_2 and
-        #          Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2) or \
-        #         (self.round_number == Constants.num_rounds and i > Constants.num_rounds_part_2):
-        for p in self.player.in_all_rounds():
-            payoff[p.wage].append(p.payoff)
+        for i, p in enumerate(self.player.in_all_rounds(), 1):
+            if (self.round_number == Constants.num_rounds_part_1 and i <= Constants.num_rounds_part_1) or \
+                    (self.round_number == Constants.num_rounds_part_2 and
+                     Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2) or \
+                    (self.round_number == Constants.num_rounds and i > Constants.num_rounds_part_2):
+                payoff[p.wage].append(p.payoff)
         for key, l in payoff.items():
             payoff[key] = float(mean(l)) if len(l) > 0 else 0
         return payoff
+
+    def get_effort(self):
+        if self.round_number == Constants.num_rounds_part_1:
+            effort = [eff if i <= Constants.num_rounds_part_1 else None for i, eff in
+                      enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
+        elif self.round_number == Constants.num_rounds_part_2:
+            effort = [eff if Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2 else None for i, eff in
+                      enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
+        else:
+            effort = [eff if i > Constants.num_rounds_part_2 else None for i, eff in
+                      enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
+        return list(filter(None.__ne__, effort))
 
     def vars_for_template(self):
         return {
@@ -117,7 +127,7 @@ class ResultsSummary(Page):
             'player_in_all_rounds': self.player.in_all_rounds(),
             'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
             'avg_payoff': self.avg_payoff(),
-            'effort': [p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()],
+            'effort': self.get_effort(),
             'rounds': list(range(1, len(self.player.in_all_rounds()) + 1))
         }
 
@@ -152,16 +162,15 @@ class EndResultsSummary(Page):
             'player_in_all_rounds': self.player.in_all_rounds(),
             'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
             'avg_payoff': self.avg_payoff(),
-            'effort_game1': list(filter(lambda i, eff: eff if i <= Constants.num_rounds_part_1 else None,
-                                        enumerate([p.effort_level for p in
-                                                   self.group.get_player_by_role('Worker').in_all_rounds()], 1))),
-            'effort_game2': list(filter(lambda i, eff: eff if Constants.num_rounds_part_1 < i <=
-                                                              Constants.num_rounds_part_2 else None,
-                                        enumerate([p.effort_level for p in
-                                                   self.group.get_player_by_role('Worker').in_all_rounds()], 1))),
-            'effort_game3': list(filter(lambda i, eff: eff if i > Constants.num_rounds_part_2 else None,
-                                        enumerate([p.effort_level for p in
-                                                   self.group.get_player_by_role('Worker').in_all_rounds()], 1))),
+            'effort_game1': [eff if i <= Constants.num_rounds_part_1 else None for i, eff in
+                             enumerate([p.effort_level for p in
+                                        self.group.get_player_by_role('Worker').in_all_rounds()], 1)],
+            'effort_game2': [eff if Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2 else None
+                             for i, eff in enumerate([p.effort_level for p in
+                                                      self.group.get_player_by_role('Worker').in_all_rounds()], 1)],
+            'effort_game3': [eff if i > Constants.num_rounds_part_2 else None for i, eff in
+                             enumerate([p.effort_level for p in
+                                        self.group.get_player_by_role('Worker').in_all_rounds()], 1)],
             'rounds': list(range(1, len(self.player.in_all_rounds()) + 1))
         }
 
