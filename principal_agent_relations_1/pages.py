@@ -121,6 +121,18 @@ class ResultsSummary(Page):
                       enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
         return list(filter(None.__ne__, effort))
 
+    def get_desired_effort(self):
+        if self.round_number == Constants.num_rounds_part_1:
+            effort = [eff if i <= Constants.num_rounds_part_1 else None for i, eff in
+                      enumerate([p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()], 1)]
+        elif self.round_number == Constants.num_rounds_part_2:
+            effort = [eff if Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2 else None for i, eff in
+                      enumerate([p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()], 1)]
+        else:
+            effort = [eff if i > Constants.num_rounds_part_2 else None for i, eff in
+                      enumerate([p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()], 1)]
+        return list(filter(None.__ne__, effort))
+
     def get_rounds(self):
         if self.round_number == Constants.num_rounds_part_1:
             return list(range(1, Constants.num_rounds_part_1 + 1))
@@ -129,6 +141,23 @@ class ResultsSummary(Page):
         else:
             return list(range(1, (Constants.num_rounds - Constants.num_rounds_part_2) + 1))
 
+    def get_effort_matching(self):
+        effort = self.get_effort()
+        desired_effort = self.get_desired_effort()
+        matching = {'matching': 0., 'greater': 0., 'below': 0.}
+
+        for eff, desired_eff in zip(effort, desired_effort):
+            if eff == desired_eff:
+                matching['matching'] += 1
+            elif eff > desired_eff:
+                matching['greater'] += 1
+            else:
+                matching['below'] += 1
+        matching['matching'] = (matching['matching'] / len(effort)) * 100
+        matching['greater'] = (matching['greater'] / len(effort)) * 100
+        matching['below'] = (matching['below'] / len(effort)) * 100
+        return matching
+
     def vars_for_template(self):
         return {
             'total_payoff': sum([r.payoff for r in self.player.in_all_rounds()]),
@@ -136,7 +165,8 @@ class ResultsSummary(Page):
             'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
             'avg_payoff': self.avg_payoff(),
             'effort': self.get_effort(),
-            'rounds': self.get_rounds()
+            'rounds': self.get_rounds(),
+            'effort_matching': self.get_effort_matching()
         }
 
 

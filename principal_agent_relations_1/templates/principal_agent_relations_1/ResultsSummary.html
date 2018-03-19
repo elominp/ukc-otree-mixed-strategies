@@ -116,9 +116,30 @@
         })
     </script>
 
-    <table class="table table-responsive">
-        <tr></tr>
-    </table>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>Effort matching</th>
+                        <th>Proportion</th>
+                    </tr>
+                    <tr>
+                        <td>Effort level matching desired effort level</td>
+                        <td>{{ effort_matching.matching }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Effort level greater than desired effort level</td>
+                        <td>{{ effort_matching.greater }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Effort level below desired effort level</td>
+                        <td>{{ effort_matching.below }}%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
     {% next_button %}
 
 {% endblock %}
