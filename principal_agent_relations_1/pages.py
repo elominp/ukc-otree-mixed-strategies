@@ -122,10 +122,55 @@ class ResultsSummary(Page):
         }
 
 
+class EndResultsSummary(Page):
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def avg_effort(self, player):
+        effort = {}
+        for i in range(1, 11):
+            effort[i] = []
+        for p in player.in_all_rounds():
+            effort[p.wage].append(p.effort_level)
+        for key, l in effort.items():
+            effort[key] = mean(l) if len(l) > 0 else 0
+        return effort
+
+    def avg_payoff(self):
+        payoff = {}
+        for i in range(1, 11):
+            payoff[i] = []
+        for p in self.player.in_all_rounds():
+            payoff[p.wage].append(p.payoff)
+        for key, l in payoff.items():
+            payoff[key] = float(mean(l)) if len(l) > 0 else 0
+        return payoff
+
+    def vars_for_template(self):
+        return {
+            'total_payoff': sum([r.payoff for r in self.player.in_all_rounds()]),
+            'player_in_all_rounds': self.player.in_all_rounds(),
+            'avg_effort': self.avg_effort(self.group.get_player_by_role('Worker')),
+            'avg_payoff': self.avg_payoff(),
+            'effort_game1': list(filter(lambda i, eff: eff if i <= Constants.num_rounds_part_1 else None,
+                                        enumerate([p.effort_level for p in
+                                                   self.group.get_player_by_role('Worker').in_all_rounds()], 1))),
+            'effort_game2': list(filter(lambda i, eff: eff if Constants.num_rounds_part_1 < i <=
+                                                              Constants.num_rounds_part_2 else None,
+                                        enumerate([p.effort_level for p in
+                                                   self.group.get_player_by_role('Worker').in_all_rounds()], 1))),
+            'effort_game3': list(filter(lambda i, eff: eff if i > Constants.num_rounds_part_2 else None,
+                                        enumerate([p.effort_level for p in
+                                                   self.group.get_player_by_role('Worker').in_all_rounds()], 1))),
+            'rounds': list(range(1, len(self.player.in_all_rounds()) + 1))
+        }
+
+
 page_sequence = [
     Offer,
     OfferWaitPage,
     Accept,
     ResultsWaitPage,
-    ResultsSummary
+    ResultsSummary,
+    EndResultsSummary
 ]

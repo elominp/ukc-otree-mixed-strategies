@@ -1,0 +1,131 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Final results
+{% endblock %}
+
+{% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Player and outcome</th>
+        </tr>
+        {% for p in player_in_all_rounds %}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>
+                    You were the {{ p.role }} and earned {{ p.payoff }} for an effort level of {{ p.effort_level }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p>
+        Your total payoff is therefore {{ total_payoff }}.
+    </p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p>Average efforts and payoffs by wage:</p>
+                <canvas id="final_chart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-md-6">
+                <p>Effort over time:</p>
+                <canvas id="effort_chart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var canvas = document.getElementById("final_chart").getContext("2d");
+        var chart = new Chart(canvas, {
+            type: "bar",
+            data: {
+                labels: [{% for i in avg_effort %}{{i}},{% endfor %}],
+                datasets: [
+                    {% comment %} {% for p in player %} {% endcomment %}
+                        {
+                            label: "Average Effort",
+                            data: [ {% for _, x in avg_effort.items %}{{x}},{% endfor %} ],
+                            backgroundColor: "rgba(0, 255, 0, 0.5)"
+                        },
+                        {
+                            label: "Average Payoff",
+                            data: [ {% for _, x in avg_payoff.items %}{{x}},{% endfor %} ],
+                            backgroundColor: "rgba(0, 0, 255, 0.5)"
+                        }
+                    {% comment %} {% endfor %} {% endcomment %}
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Wage"
+                        }
+                    }],
+                        yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Avg. Effort level / Avg. Payoff"
+                        }
+                    }]
+                }
+            }
+        })
+        
+        var effort_canvas = document.getElementById("effort_chart").getContext("2d");
+        var effort_chart = new Chart(effort_canvas, {
+            type: "line",
+            data: {
+                labels: [ {% for round in rounds %}{{round}},{% endfor %} ],
+                datasets: [
+                    {
+                        label: "Effort level over time in Game 1",
+                        data: [ {% for x in effort_game1 %}{% if x != None %}{{x}}{% else %}null{% endif %},{% endfor %} ],
+                        backgroundColor: "rgba(0, 0, 0, 0.0)",
+                        borderColor: "rgba(255, 0, 0, 0.5)"
+                    },
+                    {
+                        label: "Effort level over time in Game 2",
+                        data: [ {% for x in effort_game2 %}{% if x != None %}{{x}}{% else %}null{% endif %},{% endfor %} ],
+                        backgroundColor: "rgba(0, 0, 0, 0.0)",
+                        borderColor: "rgba(0, 255, 0, 0.5)"
+                    },
+                    {
+                        label: "Effort level over time in Game 3",
+                        data: [ {% for x in effort_game3 %}{% if x != None %}{{x}}{% else %}null{% endif %},{% endfor %} ],
+                        backgroundColor: "rgba(0, 0, 0, 0.0)",
+                        borderColor: "rgba(0, 0, 255, 0.5)"
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Time"
+                        }
+                    }],
+                        yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Effort level"
+                        }
+                    }]
+                }
+            }
+        })
+    </script>
+
+{% endblock %}
