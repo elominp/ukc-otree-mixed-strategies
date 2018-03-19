@@ -194,6 +194,23 @@ class EndResultsSummary(Page):
             payoff[key] = float(mean(l)) if len(l) > 0 else 0
         return payoff
 
+    def get_effort_matching(self):
+        effort = [p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()]
+        desired_effort = [p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()]
+        matching = {'matching': 0., 'greater': 0., 'below': 0.}
+
+        for eff, desired_eff in zip(effort, desired_effort):
+            if eff == desired_eff:
+                matching['matching'] += 1
+            elif eff > desired_eff:
+                matching['greater'] += 1
+            else:
+                matching['below'] += 1
+        matching['matching'] = (matching['matching'] / len(effort)) * 100
+        matching['greater'] = (matching['greater'] / len(effort)) * 100
+        matching['below'] = (matching['below'] / len(effort)) * 100
+        return matching
+
     def vars_for_template(self):
         return {
             'total_payoff': sum([r.payoff for r in self.player.in_all_rounds()]),
@@ -209,7 +226,8 @@ class EndResultsSummary(Page):
             'effort_game3': [eff if i > Constants.num_rounds_part_2 else None for i, eff in
                              enumerate([p.effort_level for p in
                                         self.group.get_player_by_role('Worker').in_all_rounds()], 1)],
-            'rounds': list(range(1, len(self.player.in_all_rounds()) + 1))
+            'rounds': list(range(1, len(self.player.in_all_rounds()) + 1)),
+            'effort_matching': self.get_effort_matching()
         }
 
 
