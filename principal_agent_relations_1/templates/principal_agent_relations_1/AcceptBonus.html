@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Round {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+    <h4>Instructions</h4>
+    <p>
+        You will take part in a labour market. At the beginning of the game you will be randomly allocated the role of
+        either worker or employer. Workers and employers will then be randomly matched together - one worker to one
+        employer. Note that workers and emplyers will be re-matched at the start of each new game. You shall play
+        several times each of the following three games.
+    </p>
+
+    {{ instructions | safe }}
+
+    <h4>Round history</h4>
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Player and outcome</th>
+        </tr>
+        {% for p in player_in_previous_rounds %}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>
+                    You were proposed a wage of {{ p.wage }}, done an effort level of {{ p.effort_level }} and earned {{ p.payoff }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p>You proposed a wage of {{ group.wage }} for a desired effort level of {{ group.desired_effort_level }} and the
+    worker did an effort level of {{ group.effort_level_done }}</p>
+
+    {% formfield group.bonus_given label="Do you want to give the bonus to the employer?" %}
+
+    {% next_button %}
+{% endblock %}

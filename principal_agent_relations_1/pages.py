@@ -70,6 +70,14 @@ class Accept(Page):
     form_model = 'group'
 
 
+class AcceptBonus(Page):
+    def is_displayed(self):
+        return self.player.role() == 'Employer' and Constants.num_rounds_part_2 < self.round_number
+
+    form_model = 'group'
+    form_fields = ['bonus_given']
+
+
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_payoffs()
@@ -235,6 +243,7 @@ page_sequence = [
     Offer,
     OfferWaitPage,
     Accept,
+    AcceptBonus,
     ResultsWaitPage,
     ResultsSummary,
     EndResultsSummary

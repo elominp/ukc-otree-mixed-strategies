@@ -56,8 +56,11 @@ def set_payoffs_3(self):
     employer = self.get_player_by_role('Employer')
     worker = self.get_player_by_role('Worker')
 
-    employer.payoff = 2 * self.desired_effort_level - self.wage + self.bonus
-    worker.payoff = float(self.wage) - Constants.worker_profit_table[self.effort_level_done] - float(self.bonus)
+    employer.payoff = 2 * self.desired_effort_level - self.wage
+    worker.payoff = float(self.wage) - Constants.worker_profit_table[self.effort_level_done]
+    if self.bonus_given is True:
+        employer.payoff -= self.bonus
+        worker.payoff += float(self.bonus)
 
     employer.wage = self.wage
     worker.wage = self.wage
@@ -77,6 +80,7 @@ class Group(BaseGroup):
     fine = models.IntegerField(choices=range(0, 11), widget=widgets.RadioSelectHorizontal)
     accepted = models.BooleanField(widget=widgets.RadioSelectHorizontal, choices=[[True, 'Yes'], [False, 'No']])
     bonus = models.IntegerField(choices=range(0, 11), widget=widgets.RadioSelectHorizontal)
+    bonus_given = models.BooleanField(widget=widgets.RadioSelectHorizontal, choices=[[True, 'Yes'], [False, 'No']])
 
     def set_payoffs(self):
         if self.round_number <= Constants.num_rounds_part_1:
