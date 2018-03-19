@@ -9,6 +9,15 @@ class Introduction(Page):
     pass
 
 
+def get_instructions(round_number):
+    if round_number <= Constants.num_rounds_part_1:
+        return Constants.instructions_game1
+    elif Constants.num_rounds_part_1 < round_number <= Constants.num_rounds_part_2:
+        return Constants.instructions_game2
+    else:
+        return Constants.instructions_game3
+
+
 class Offer(Page):
     def is_displayed(self):
         return self.player.role() == 'Employer'
@@ -24,7 +33,8 @@ class Offer(Page):
     def vars_for_template(self):
         return {
             'player_in_previous_rounds': self.player.in_previous_rounds(),
-            'form_fields': self.get_form_fields()
+            'form_fields': self.get_form_fields(),
+            'instructions': get_instructions(self.round_number)
         }
 
     form_model = 'group'
@@ -40,14 +50,21 @@ class Accept(Page):
 
     def get_form_fields(self):
         form_fields = ['effort_level_done']
-        if Constants.num_rounds_part_1 < self.round_number < Constants.num_rounds_part_2:
+        if Constants.num_rounds_part_1 < self.round_number <= Constants.num_rounds_part_2:
             form_fields.append('accepted')
         return form_fields
 
     def vars_for_template(self):
+        additional_variables = {}
+        if Constants.num_rounds_part_1 < self.round_number <= Constants.num_rounds_part_2:
+            additional_variables['fine'] = self.group.fine
+        if self.round_number > Constants.num_rounds_part_2:
+            additional_variables['bonus'] = self.group.bonus
         return {
             'player_in_previous_rounds': self.player.in_previous_rounds(),
-            'form_fields': self.get_form_fields()
+            'form_fields': self.get_form_fields(),
+            'instructions': get_instructions(self.round_number),
+            'additional_variables': additional_variables
         }
 
     form_model = 'group'
