@@ -33,6 +33,14 @@
 
     {% formfield group.desired_effort_level label="Desired effort level:" %}
 
+    {% if 'fine' in form_fields %}
+        {% formfield group.fine label="Fine:" %}
+    {% endif %}
+
+    {% if 'bonus' in form_fields %}
+        {% formfield group.bonus label="Bonus proposed:" %}
+    {% endif %}
+
     {% next_button %}
 
 {% endblock %}

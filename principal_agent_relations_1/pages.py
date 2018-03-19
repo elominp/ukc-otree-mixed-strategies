@@ -13,13 +13,21 @@ class Offer(Page):
     def is_displayed(self):
         return self.player.role() == 'Employer'
 
+    def get_form_fields(self):
+        form_fields = ['wage', 'desired_effort_level']
+        if Constants.num_rounds_part_1 < self.round_number <= Constants.num_rounds_part_2:
+            form_fields.append('fine')
+        if self.round_number > Constants.num_rounds_part_2:
+            form_fields.append('bonus')
+        return form_fields
+
     def vars_for_template(self):
         return {
-            'player_in_previous_rounds': self.player.in_previous_rounds()
+            'player_in_previous_rounds': self.player.in_previous_rounds(),
+            'form_fields': self.get_form_fields()
         }
 
     form_model = 'group'
-    form_fields = ['wage', 'desired_effort_level']
 
 
 class OfferWaitPage(WaitPage):
@@ -30,13 +38,19 @@ class Accept(Page):
     def is_displayed(self):
         return self.player.role() == 'Worker'
 
+    def get_form_fields(self):
+        form_fields = ['effort_level_done']
+        if Constants.num_rounds_part_1 < self.round_number < Constants.num_rounds_part_2:
+            form_fields.append('accepted')
+        return form_fields
+
     def vars_for_template(self):
         return {
-            'player_in_previous_rounds': self.player.in_previous_rounds()
+            'player_in_previous_rounds': self.player.in_previous_rounds(),
+            'form_fields': self.get_form_fields()
         }
 
     form_model = 'group'
-    form_fields = ['effort_level_done']
 
 
 class ResultsWaitPage(WaitPage):
@@ -46,12 +60,19 @@ class ResultsWaitPage(WaitPage):
 
 class ResultsSummary(Page):
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds
+        return self.round_number == Constants.num_rounds_part_1 or \
+               self.round_number == Constants.num_rounds_part_2 or \
+               self.round_number == Constants.num_rounds
 
     def avg_effort(self, player):
         effort = {}
         for i in range(1, 11):
             effort[i] = []
+        # for i, p in enumerate(player.in_all_rounds(), 1):
+        #     if (self.round_number == Constants.num_rounds_part_1 and i <= Constants.num_rounds_part_1) or \
+        #         (self.round_number == Constants.num_rounds_part_2 and
+        #          Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2) or \
+        #         (self.round_number == Constants.num_rounds and i > Constants.num_rounds_part_2):
         for p in player.in_all_rounds():
             effort[p.wage].append(p.effort_level)
         for key, l in effort.items():
@@ -62,6 +83,11 @@ class ResultsSummary(Page):
         payoff = {}
         for i in range(1, 11):
             payoff[i] = []
+        # for i, p in enumerate(self.player.in_all_rounds(), 1):
+        #     if (self.round_number == Constants.num_rounds_part_1 and i <= Constants.num_rounds_part_1) or \
+        #         (self.round_number == Constants.num_rounds_part_2 and
+        #          Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2) or \
+        #         (self.round_number == Constants.num_rounds and i > Constants.num_rounds_part_2):
         for p in self.player.in_all_rounds():
             payoff[p.wage].append(p.payoff)
         for key, l in payoff.items():

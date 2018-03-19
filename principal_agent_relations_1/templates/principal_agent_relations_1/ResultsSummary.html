@@ -27,11 +27,18 @@
         Your total payoff is therefore {{ total_payoff }}.
     </p>
 
-    <p>Average efforts and payoffs by wage:</p>
-    <canvas id="final_chart" width="400" height="400"></canvas>
-
-    <p>Effort over time:</p>
-    <canvas id="effort_chart" width="400" height="400"></canvas>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p>Average efforts and payoffs by wage:</p>
+                <canvas id="final_chart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-12 col-md-6">
+                <p>Effort over time:</p>
+                <canvas id="effort_chart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
 
     <script>
         var canvas = document.getElementById("final_chart").getContext("2d");
@@ -109,5 +116,6 @@
         })
     </script>
 
+    {% next_button %}
 
 {% endblock %}

@@ -31,6 +31,10 @@
 
     <p>You're proposed a wage of: {{ group.wage }}</p>
 
+    {% if 'accepted' in form_fields %}
+        {% formfield group.accepted label="Do you accept the offer?" %}
+    {% endif %}
+
     {% formfield group.effort_level_done label="Effort level you want to do:" %}
 
     {% next_button %}
