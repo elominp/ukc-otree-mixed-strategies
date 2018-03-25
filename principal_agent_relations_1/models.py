@@ -9,7 +9,8 @@ doc = """
 
 
 class Subsession(BaseSubsession):
-    pass
+    def creating_session(self):
+        self.group_randomly()
 
 
 def set_payoffs_1(self):

@@ -70,6 +70,10 @@ class Accept(Page):
     form_model = 'group'
 
 
+class AcceptBonusWaitPage(WaitPage):
+    pass
+
+
 class AcceptBonus(Page):
     def is_displayed(self):
         return self.player.role() == 'Employer' and Constants.num_rounds_part_2 < self.round_number
@@ -239,11 +243,17 @@ class EndResultsSummary(Page):
         }
 
 
+class SyncGroups(WaitPage):
+    wait_for_all_groups = True
+
+
 page_sequence = [
     Offer,
     OfferWaitPage,
     Accept,
+    AcceptBonusWaitPage,
     AcceptBonus,
+    SyncGroups,
     ResultsWaitPage,
     ResultsSummary,
     EndResultsSummary
