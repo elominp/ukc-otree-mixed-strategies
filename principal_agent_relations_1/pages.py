@@ -124,25 +124,25 @@ class ResultsSummary(Page):
     def get_effort(self):
         if self.round_number == Constants.num_rounds_part_1:
             effort = [eff if i <= Constants.num_rounds_part_1 else None for i, eff in
-                      enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
+                      enumerate([p.effort_level for p in self.player.in_all_rounds()], 1)]
         elif self.round_number == Constants.num_rounds_part_2:
             effort = [eff if Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2 else None for i, eff in
-                      enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
+                      enumerate([p.effort_level for p in self.player.in_all_rounds()], 1)]
         else:
             effort = [eff if i > Constants.num_rounds_part_2 else None for i, eff in
-                      enumerate([p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()], 1)]
+                      enumerate([p.effort_level for p in self.player.in_all_rounds()], 1)]
         return list(filter(None.__ne__, effort))
 
     def get_desired_effort(self):
         if self.round_number == Constants.num_rounds_part_1:
             effort = [eff if i <= Constants.num_rounds_part_1 else None for i, eff in
-                      enumerate([p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()], 1)]
+                      enumerate([p.desired_effort_level for p in self.player.in_all_rounds()], 1)]
         elif self.round_number == Constants.num_rounds_part_2:
             effort = [eff if Constants.num_rounds_part_1 < i <= Constants.num_rounds_part_2 else None for i, eff in
-                      enumerate([p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()], 1)]
+                      enumerate([p.desired_effort_level for p in self.player.in_all_rounds()], 1)]
         else:
             effort = [eff if i > Constants.num_rounds_part_2 else None for i, eff in
-                      enumerate([p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()], 1)]
+                      enumerate([p.desired_effort_level for p in self.player.in_all_rounds()], 1)]
         return list(filter(None.__ne__, effort))
 
     def get_rounds(self):
@@ -207,8 +207,8 @@ class EndResultsSummary(Page):
         return payoff
 
     def get_effort_matching(self):
-        effort = [p.effort_level for p in self.group.get_player_by_role('Worker').in_all_rounds()]
-        desired_effort = [p.effort_level for p in self.group.get_player_by_role('Employer').in_all_rounds()]
+        effort = [p.effort_level for p in self.player.in_all_rounds()]
+        desired_effort = [p.desired_effort_level for p in self.player.in_all_rounds()]
         matching = {'matching': 0., 'greater': 0., 'below': 0.}
 
         for eff, desired_eff in zip(effort, desired_effort):
