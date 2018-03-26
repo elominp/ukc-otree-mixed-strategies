@@ -146,15 +146,15 @@
                     </tr>
                     <tr>
                         <td>Effort level matching desired effort level</td>
-                        <td>{{ effort_matching.matching }}%</td>
+                        <td>{{ effort_matching.matching|floatformat:2 }}%</td>
                     </tr>
                     <tr>
                         <td>Effort level greater than desired effort level</td>
-                        <td>{{ effort_matching.greater }}%</td>
+                        <td>{{ effort_matching.greater|floatformat:2 }}%</td>
                     </tr>
                     <tr>
                         <td>Effort level below desired effort level</td>
-                        <td>{{ effort_matching.below }}%</td>
+                        <td>{{ effort_matching.below|floatformat:2 }}%</td>
                     </tr>
                 </table>
             </div>
