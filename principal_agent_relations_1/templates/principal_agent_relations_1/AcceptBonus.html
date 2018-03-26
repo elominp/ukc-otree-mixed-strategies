@@ -32,10 +32,12 @@
         {% endfor %}
     </table>
 
+    <p>You're the <b>employer</b></p>
+
     <p>You proposed a wage of {{ group.wage }} for a desired effort level of {{ group.desired_effort_level }} and the
     worker did an effort level of {{ group.effort_level_done }}</p>
 
-    {% formfield group.bonus_given label="Do you want to give the bonus to the employer?" %}
+    {% formfield group.bonus_given label="Do you want to give the bonus to the employee?" %}
 
     {% next_button %}
 {% endblock %}
