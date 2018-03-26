@@ -22,8 +22,10 @@ def set_payoffs_1(self):
 
     employer.wage = self.wage
     worker.wage = self.wage
-    employer.effort_level = self.desired_effort_level
+    employer.effort_level = self.effort_level_done
     worker.effort_level = self.effort_level_done
+    employer.desired_effort_level = self.desired_effort_level
+    worker.desired_effort_level = self.desired_effort_level
 
 
 def set_payoffs_2(self):
@@ -45,8 +47,10 @@ def set_payoffs_2(self):
 
     employer.wage = self.wage
     worker.wage = self.wage
-    employer.effort_level = self.desired_effort_level
+    employer.effort_level = self.effort_level_done
     worker.effort_level = self.effort_level_done
+    employer.desired_effort_level = self.desired_effort_level
+    worker.desired_effort_level = self.desired_effort_level
     employer.fine = self.fine
     worker.fine = self.fine
     employer.accepted = self.accepted
@@ -65,8 +69,10 @@ def set_payoffs_3(self):
 
     employer.wage = self.wage
     worker.wage = self.wage
-    employer.effort_level = self.desired_effort_level
+    employer.effort_level = self.effort_level_done
     worker.effort_level = self.effort_level_done
+    employer.desired_effort_level = self.desired_effort_level
+    worker.desired_effort_level = self.desired_effort_level
     employer.bonus = self.bonus
     worker.bonus = self.bonus
 
@@ -101,6 +107,7 @@ class Player(BasePlayer):
         [False, 'No']
     ])
     bonus = models.IntegerField(min=0, max=10)
+    desired_effort_level = models.IntegerField(min=1, max=10)
 
     def role(self):
         return 'Employer' if self.id_in_group == 1 else 'Worker'
