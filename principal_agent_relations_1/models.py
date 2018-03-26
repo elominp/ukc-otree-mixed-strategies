@@ -121,6 +121,7 @@ class Constants(BaseConstants):
     num_rounds_part_2 = num_rounds_part_1 + int(num_rounds / 4)
     instructions_template = 'principal_agent_relations_1/Instructions.html'
     worker_profit_table = {1: 0.01, 2: 0.10, 3: 0.20, 4: 0.40, 5: 0.60, 6: 0.80, 7: 1.00, 8: 1.30, 9: 1.60, 10: 2.00}
+    timeout_seconds = 5
     instructions_game1 = """
         <p><b>Game 1</b>: If you are an <b>employer</b> then you choose a <b>wage = w</b> and a <b>desired effort level = 
         de</b>. The wage can be any number between 1 and 10 and desired effort level can be any number between 1 and 10.

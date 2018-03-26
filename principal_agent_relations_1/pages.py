@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from statistics import mean
+from random import randint, choice
 from ._builtin import *
 from .models import Constants
 
@@ -19,6 +20,8 @@ def get_instructions(round_number):
 
 
 class Offer(Page):
+    timeout_seconds = Constants.timeout_seconds
+
     def is_displayed(self):
         return self.player.role() == 'Employer'
 
@@ -37,6 +40,15 @@ class Offer(Page):
             'instructions': get_instructions(self.round_number)
         }
 
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.group.wage = randint(1, 10)
+            self.group.desired_effort_level = randint(1, 10)
+            if Constants.num_rounds_part_1 < self.round_number <= Constants.num_rounds_part_2:
+                self.group.fine = randint(0, 10)
+            if self.round_number > Constants.num_rounds_part_2:
+                self.group.bonus = randint(0, 10)
+
     form_model = 'group'
 
 
@@ -45,6 +57,8 @@ class OfferWaitPage(WaitPage):
 
 
 class Accept(Page):
+    timeout_seconds = Constants.timeout_seconds
+
     def is_displayed(self):
         return self.player.role() == 'Worker'
 
@@ -67,6 +81,12 @@ class Accept(Page):
             'additional_variables': additional_variables
         }
 
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.group.effort_level_done = randint(1, 10)
+            if Constants.num_rounds_part_1 < self.round_number <= Constants.num_rounds_part_2:
+                self.group.accepted = choice([True, False])
+
     form_model = 'group'
 
 
@@ -75,8 +95,14 @@ class AcceptBonusWaitPage(WaitPage):
 
 
 class AcceptBonus(Page):
+    timeout_seconds = Constants.timeout_seconds
+    
     def is_displayed(self):
         return self.player.role() == 'Employer' and Constants.num_rounds_part_2 < self.round_number
+    
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.group.bonus_given = choice([True, False])
 
     form_model = 'group'
     form_fields = ['bonus_given']
