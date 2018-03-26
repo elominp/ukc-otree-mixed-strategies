@@ -27,7 +27,11 @@
             <tr>
                 <td>{{ p.round_number }}</td>
                 <td>
-                    You proposed a wage of {{ p.wage }} for a desired effort level of {{ p.effort_level }} and earned {{ p.payoff }}
+                    {% if p.role == 'Employer' %}
+                        You were the employer and proposed a wage of {{ p.wage }} for a desired effort level of {{ p.effort_level }} and earned {{ p.payoff }}
+                    {% else %}
+                        You were the employee, were proposed a wage of {{ p.wage }}, done an effort level of {{ p.effort_level }} and earned {{ p.payoff }}
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
